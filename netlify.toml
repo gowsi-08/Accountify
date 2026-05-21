@@ -9,3 +9,4 @@
 
 [build.environment]
   NODE_VERSION = "20"
+  SECRETS_SCAN_OMIT_PATHS = "docs/**,*.md,.env.example,DEPLOYMENT_READY.md,CONFIG_SETUP.md,README.md,WORKSPACE_CONTEXT.md"
