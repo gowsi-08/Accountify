@@ -78,28 +78,20 @@ cd finance-tracker
 npm install
 ```
 
-3. **Configure GitHub (Option 1: Hardcoded)**
+3. **Configure GitHub (Environment Variables)**
 ```bash
-# Copy config template
-cp src/config.example.js src/config.js
+# Copy environment template
+cp .env.example .env
 
-# Edit src/config.js with your details
+# Edit .env with your details
 ```
 
-```javascript
-export const config = {
-  github: {
-    autoSetup: true,
-    token: 'your_github_token_here',
-    owner: 'your_github_username',
-    repo: 'finance-data',
-    branch: 'main'
-  },
-  security: {
-    autoSetup: true,
-    pin: '123456' // Your 6-digit PIN
-  }
-};
+```env
+VITE_GITHUB_TOKEN=your_github_token_here
+VITE_GITHUB_OWNER=your_github_username
+VITE_GITHUB_REPO=DataFinanceTracker
+VITE_GITHUB_BRANCH=main
+VITE_DEFAULT_PIN=123456
 ```
 
 4. **Start the app**
@@ -118,8 +110,8 @@ http://localhost:5173
 
 ### Quick Guides
 - [Quick Start Guide](docs/QUICK_START.md) - Get started in 5 minutes
+- [Configuration Setup](CONFIG_SETUP.md) - Environment variables setup
 - [GitHub Setup](docs/GITHUB_API_SETUP.md) - Configure GitHub backend
-- [Hardcoded Setup](docs/HARDCODED_SETUP.md) - Auto-configuration guide
 
 ### Feature Guides
 - [Complete Features List](docs/COMPLETE_FEATURES_LIST.md) - All 19+ features
@@ -253,9 +245,10 @@ finance-tracker/
 ### Best Practices
 - Use a strong 6-digit PIN
 - Don't share your GitHub token
-- Keep `src/config.js` in `.gitignore`
+- Keep `.env` file secure (already in `.gitignore`)
 - Regular backups to GitHub
 - Use private repository only
+- Use environment variables for deployment
 
 ---
 
