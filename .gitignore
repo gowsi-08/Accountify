@@ -24,7 +24,6 @@ dist-ssr
 *.sw?
 
 # Sensitive configuration files
-src/config.js
 init-github-data.js
 check-repos.js
 
