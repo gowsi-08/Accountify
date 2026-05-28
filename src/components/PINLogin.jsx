@@ -10,8 +10,8 @@ const PINLogin = ({ onLogin, lockInfo }) => {
     e.preventDefault();
     setError('');
 
-    if (pin.length !== 6) {
-      setError('PIN must be 6 digits');
+    if (pin.length !== 4) {
+      setError('PIN must be 4 digits');
       return;
     }
 
@@ -24,7 +24,7 @@ const PINLogin = ({ onLogin, lockInfo }) => {
   };
 
   const handlePinChange = (e) => {
-    const value = e.target.value.replace(/\D/g, '').slice(0, 6);
+    const value = e.target.value.replace(/\D/g, '').slice(0, 4);
     setPin(value);
   };
 
@@ -61,7 +61,7 @@ const PINLogin = ({ onLogin, lockInfo }) => {
             <Lock className="w-8 h-8 text-green-600" />
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Enter PIN</h1>
-          <p className="text-gray-600">Enter your 6-digit PIN to access your finance data</p>
+          <p className="text-gray-600">Enter your 4-digit PIN to access your finance data</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -71,8 +71,8 @@ const PINLogin = ({ onLogin, lockInfo }) => {
               value={pin}
               onChange={handlePinChange}
               className="w-full px-4 py-4 text-center text-3xl tracking-widest border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-              placeholder="••••••"
-              maxLength="6"
+              placeholder="••••"
+              maxLength="4"
               inputMode="numeric"
               pattern="[0-9]*"
               autoFocus

@@ -20,7 +20,7 @@ export const config = {
 
   // ============ PIN CONFIGURATION ============
   security: {
-    pin: import.meta.env.VITE_DEFAULT_PIN || '123456',
+    pin: import.meta.env.VITE_DEFAULT_PIN || '2026',
     autoSetup: true
   },
 
