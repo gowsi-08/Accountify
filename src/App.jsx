@@ -28,6 +28,14 @@ function App() {
     initializeApp();
   }, []);
 
+  // Reload data when page changes to ensure fresh data
+  useEffect(() => {
+    if (authState === 'authenticated' && data) {
+      console.log('📄 Page changed, reloading data from GitHub...');
+      loadData(false, false);
+    }
+  }, [currentPage]);
+
   // No caching - direct GitHub access
 
   useEffect(() => {
@@ -87,7 +95,7 @@ function App() {
   const checkAuth = async () => {
     if (dataService.isAuthenticated()) {
       setAuthState('authenticated');
-      loadData();
+      loadData(false, true); // isInitialLoad = true
       return;
     }
 
@@ -106,7 +114,7 @@ function App() {
     dataService.setupPIN(pin);
     dataService.setAuthenticated();
     setAuthState('authenticated');
-    loadData();
+    loadData(false, true); // isInitialLoad = true
     showToast('PIN setup successful!', 'success');
   };
 
@@ -115,7 +123,8 @@ function App() {
     if (result.success) {
       dataService.setAuthenticated();
       setAuthState('authenticated');
-      await loadData();
+      setLoading(true); // Show loading state while data loads
+      await loadData(false, true); // isInitialLoad = true
       showToast('Welcome back!', 'success');
       return { success: true };
     } else {
@@ -123,16 +132,43 @@ function App() {
     }
   };
 
-  const loadData = async () => {
+  const loadData = async (showSuccessToast = false, isInitialLoad = false) => {
+    setLoading(true);
     try {
       console.log('📥 Loading data from GitHub...');
       const fetchedData = await dataService.loadAllDataFromGitHub();
       setData(fetchedData);
       setUnsavedChanges(0);
-      showToast('✅ Data loaded from GitHub', 'success');
+      console.log('✅ Data loaded successfully');
+      if (showSuccessToast) {
+        showToast('✅ Data loaded from GitHub', 'success');
+      }
     } catch (error) {
       console.error('Failed to load data:', error);
-      showToast('❌ Failed to load data from GitHub', 'error');
+      
+      // Only show error toast if it's not the initial load after login
+      if (!isInitialLoad) {
+        showToast('❌ Failed to load data: ' + error.message, 'error');
+      } else {
+        console.log('Setting up with default data structure...');
+      }
+      
+      // Set empty data structure so app can still work
+      setData({
+        accounts: [],
+        transactions: [],
+        categories: {
+          income: ['Salary', 'Freelance', 'Interest', 'Dividend', 'Rental', 'Other Income'],
+          expense: ['Food', 'Transport', 'Bills & Utilities', 'Shopping', 'Medical', 'Entertainment', 'Investment', 'Other Expense']
+        },
+        settings: {
+          currency: 'INR',
+          theme: 'light',
+          darkMode: false,
+          budgets: {},
+          loans: []
+        }
+      });
     } finally {
       setLoading(false);
     }
@@ -154,8 +190,11 @@ function App() {
         await dataService.saveSettings(newData.settings);
       }
       
-      // Update local state
-      setData(newData);
+      // Reload fresh data from GitHub after every save
+      console.log('🔄 Reloading fresh data from GitHub...');
+      const freshData = await dataService.loadAllDataFromGitHub();
+      setData(freshData);
+      
       showToast('✅ Saved to GitHub', 'success');
     } catch (error) {
       console.error('Failed to save data:', error);
