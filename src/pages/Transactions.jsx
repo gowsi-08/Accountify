@@ -11,6 +11,7 @@ const Transactions = ({ data, onSave, showToast }) => {
   const [showAttachmentModal, setShowAttachmentModal] = useState(false);
   const [viewingAttachments, setViewingAttachments] = useState(null);
   const [uploadingFile, setUploadingFile] = useState(false);
+  const [activeTab, setActiveTab] = useState('income'); // New: Tab state
   
   // Filter states
   const [filterType, setFilterType] = useState('all');
@@ -115,7 +116,7 @@ const Transactions = ({ data, onSave, showToast }) => {
     } else {
       setEditingTransaction(null);
       setFormData({
-        type: 'income',
+        type: activeTab, // Auto-set to current tab
         amount: '',
         from_account: '',
         to_account: '',
@@ -213,7 +214,12 @@ const Transactions = ({ data, onSave, showToast }) => {
 
   const filteredTransactions = data.transactions
     .filter(txn => {
-      // Type filter
+      // Tab filter - filter by active tab
+      if (activeTab === 'income' && txn.type !== 'income') return false;
+      if (activeTab === 'expense' && txn.type !== 'expense') return false;
+      if (activeTab === 'transfer' && txn.type !== 'transfer') return false;
+      
+      // Type filter (if using advanced filters)
       if (filterType !== 'all' && txn.type !== filterType) return false;
       
       // Search filter
@@ -282,6 +288,51 @@ const Transactions = ({ data, onSave, showToast }) => {
           <Plus className="w-5 h-5" />
           Add Transaction
         </button>
+      </div>
+
+      {/* Tabs for Income/Expense/Transfer */}
+      <div className="bg-white rounded-lg shadow border border-gray-200 p-1">
+        <div className="flex gap-2">
+          <button
+            onClick={() => {
+              setActiveTab('income');
+              setFilterType('all');
+            }}
+            className={`flex-1 px-4 py-2 rounded-lg font-medium transition-colors ${
+              activeTab === 'income'
+                ? 'bg-green-600 text-white'
+                : 'text-gray-600 hover:bg-gray-100'
+            }`}
+          >
+            Income
+          </button>
+          <button
+            onClick={() => {
+              setActiveTab('expense');
+              setFilterType('all');
+            }}
+            className={`flex-1 px-4 py-2 rounded-lg font-medium transition-colors ${
+              activeTab === 'expense'
+                ? 'bg-red-600 text-white'
+                : 'text-gray-600 hover:bg-gray-100'
+            }`}
+          >
+            Expense
+          </button>
+          <button
+            onClick={() => {
+              setActiveTab('transfer');
+              setFilterType('all');
+            }}
+            className={`flex-1 px-4 py-2 rounded-lg font-medium transition-colors ${
+              activeTab === 'transfer'
+                ? 'bg-blue-600 text-white'
+                : 'text-gray-600 hover:bg-gray-100'
+            }`}
+          >
+            Transfer
+          </button>
+        </div>
       </div>
 
       {/* Search Bar */}

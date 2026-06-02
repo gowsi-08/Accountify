@@ -17,28 +17,14 @@ const FILES = {
 };
 
 export const dataService = {
-  // ============ RATE LIMIT TRACKING ============
+  // ============ RATE LIMIT TRACKING (Optional - Not displayed) ============
   
   getRateLimit() {
-    const stored = localStorage.getItem(RATE_LIMIT_KEY);
-    if (stored) {
-      const data = JSON.parse(stored);
-      if (Date.now() - data.timestamp > 3600000) {
-        return { remaining: 5000, total: 5000, resetTime: Date.now() + 3600000 };
-      }
-      return data;
-    }
     return { remaining: 5000, total: 5000, resetTime: Date.now() + 3600000 };
   },
 
   updateRateLimit(remaining, total) {
-    const data = {
-      remaining: remaining || 5000,
-      total: total || 5000,
-      timestamp: Date.now(),
-      resetTime: Date.now() + 3600000
-    };
-    localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify(data));
+    // No-op - rate limit tracking disabled in UI
   },
 
   // ============ AUTHENTICATION ============
@@ -277,6 +263,7 @@ export const dataService = {
       lastSync: null,
       budgetAlerts: true,
       darkMode: false,
+      chitFundEnabled: false,
       budgets: {},
       loans: []
     };
@@ -347,6 +334,7 @@ export const dataService = {
           lastSync: new Date().toISOString(),
           budgetAlerts: true,
           darkMode: false,
+          chitFundEnabled: false,
           budgets: {},
           loans: []
         }

@@ -1,15 +1,14 @@
 import { LayoutDashboard, ArrowLeftRight, Wallet, Users, Target, CreditCard, BarChart3, Settings, Upload, LogOut, Menu, X, Moon, Sun } from 'lucide-react';
 import { useState } from 'react';
-import RateLimitBadge from './RateLimitBadge';
 
-const Sidebar = ({ currentPage, onNavigate, unsavedChanges, onSync, onLogout, isSyncing, darkMode, onToggleDarkMode }) => {
+const Sidebar = ({ currentPage, onNavigate, unsavedChanges, onSync, onLogout, isSyncing, darkMode, onToggleDarkMode, chitFundEnabled = false }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'transactions', label: 'Transactions', icon: ArrowLeftRight },
     { id: 'accounts', label: 'Accounts', icon: Wallet },
-    { id: 'chitfund', label: 'Chit Fund', icon: Users },
+    ...(chitFundEnabled ? [{ id: 'chitfund', label: 'Chit Fund', icon: Users }] : []),
     { id: 'budget', label: 'Budget', icon: Target },
     { id: 'loans', label: 'Loans & EMI', icon: CreditCard },
     { id: 'reports', label: 'Reports', icon: BarChart3 },
@@ -58,11 +57,6 @@ const Sidebar = ({ currentPage, onNavigate, unsavedChanges, onSync, onLogout, is
           <Upload className={`w-5 h-5 ${isSyncing ? 'animate-spin' : ''}`} />
           {isSyncing ? 'Reloading...' : 'Reload from GitHub'}
         </button>
-
-        {/* Rate Limit Badge */}
-        <div className="mb-4">
-          <RateLimitBadge />
-        </div>
 
         {/* Navigation */}
         <nav className="space-y-2 flex-1 overflow-y-auto">

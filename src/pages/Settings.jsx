@@ -588,6 +588,45 @@ const Settings = ({ data, onSave, showToast }) => {
 
       {/* App Info */}
       <div className="bg-white rounded-lg p-4 sm:p-6 shadow border border-gray-200">
+        <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-4">Features</h2>
+        
+        {/* Chit Fund Feature Toggle */}
+        <div className="mb-6 pb-6 border-b border-gray-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="font-semibold text-gray-900">Chit Fund Management</h3>
+              <p className="text-sm text-gray-600 mt-1">Enable chit fund tracking and management</p>
+            </div>
+            <button
+              onClick={() => {
+                const updatedData = {
+                  ...data,
+                  settings: {
+                    ...data.settings,
+                    chitFundEnabled: !data.settings.chitFundEnabled
+                  }
+                };
+                onSave(updatedData, ['settings']);
+                showToast(
+                  data.settings.chitFundEnabled 
+                    ? 'Chit Fund feature disabled' 
+                    : 'Chit Fund feature enabled',
+                  'success'
+                );
+              }}
+              className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors ${
+                data.settings.chitFundEnabled ? 'bg-green-600' : 'bg-gray-300'
+              }`}
+            >
+              <span
+                className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform ${
+                  data.settings.chitFundEnabled ? 'translate-x-7' : 'translate-x-1'
+                }`}
+              />
+            </button>
+          </div>
+        </div>
+
         <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-4">About</h2>
         <div className="space-y-2 text-gray-600 text-sm sm:text-base">
           <p><strong>App:</strong> Track your Finance</p>

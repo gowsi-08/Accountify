@@ -165,6 +165,7 @@ function App() {
           currency: 'INR',
           theme: 'light',
           darkMode: false,
+          chitFundEnabled: false,
           budgets: {},
           loans: []
         }
@@ -330,6 +331,7 @@ function App() {
         isSyncing={isSyncing}
         darkMode={darkMode}
         onToggleDarkMode={toggleDarkMode}
+        chitFundEnabled={data?.settings?.chitFundEnabled || false}
       />
       <main className="flex-1 p-4 lg:p-8 overflow-auto lg:ml-0 ml-0">
         <div className="lg:hidden h-16" /> {/* Spacer for mobile menu button */}
